@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リワードダッシュボード＆ゲームミッション</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3faf6; /* Soft premium pale mint green tint */
+        }
+        /* Gradient Ring for Progress Icons */
+        .progress-ring-checked {
+            background: conic-gradient(#10b981 var(--percent, 100%), #e5e7eb 0);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Custom scrollbar for game list */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4 text-black antialiased selection:bg-emerald-200">
+
+    <!-- Container matching mobile/tablet app preview -->
+    <main class="w-full max-w-lg bg-[#f3faf6] rounded-[32px] overflow-hidden shadow-2xl border border-emerald-100/50 my-4 flex flex-col relative">
+        
+        <!-- Header / Navigation simulation bar -->
+        <header class="px-6 pt-6 pb-2 flex justify-between items-center bg-[#f3faf6]">
+            <div>
+                <img class="c483e72b _92b405e4 _738e2fb8" sizes="100px" loading="lazy" alt="UNIFI" width="84" height="28"
+                    src="data:image/svg+xml,%3csvg%20width='84'%20height='28'%20viewBox='0%200%2084%2028'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M9.32462%2027.9736C14.4744%2027.9736%2018.6492%2023.7987%2018.6492%2018.6488C18.6492%2013.4989%2014.4744%209.32401%209.32462%209.32401C4.17475%209.32401%200%2013.4975%200%2018.6475C0%2023.7975%204.17475%2027.9723%209.32462%2027.9723V27.9736Z'%20fill='%2331BAFF'/%3e%3cpath%20d='M9.32455%2018.6496C14.4744%2018.6496%2018.6492%2014.4751%2018.6492%209.32542C18.6492%204.1758%2014.4744%200%209.32455%200C4.17475%200%200%204.17453%200%209.32416C0%2014.4738%204.17475%2018.6483%209.32455%2018.6483V18.6496Z'%20fill='url(%23paint0_radial_888_180)'/%3e%3cpath%20d='M63.2919%2025.272V11.5937C63.2919%2011.3854%2063.1231%2011.2166%2062.915%2011.2166H59.4044C59.1963%2011.2166%2059.0275%2011.3854%2059.0275%2011.5937V25.272C59.0275%2025.4802%2059.1963%2025.649%2059.4044%2025.649H62.915C63.1231%2025.649%2063.2919%2025.4802%2063.2919%2025.272Z'%20fill='black'/%3e%3cpath%20d='M80.5397%2025.272V11.5937C80.5397%2011.3854%2080.3712%2011.2166%2080.1632%2011.2166H76.6522C76.4441%2011.2166%2076.2753%2011.3854%2076.2753%2011.5937V25.272C76.2753%2025.4802%2076.4441%2025.649%2076.6522%2025.649H80.1632C80.3712%2025.649%2080.5397%2025.4802%2080.5397%2025.272Z'%20fill='black'/%3e%3cpath%20d='M49.3395%2010.5274C51.8959%2010.5274%2053.8561%2011.2971%2055.1303%2012.8404C56.3943%2014.3724%2056.6039%2016.2206%2056.6039%2017.1759V25.2714C56.6039%2025.4796%2056.4351%2025.6484%2056.2269%2025.6484H52.6769C52.4687%2025.6484%2052.2999%2025.4796%2052.2999%2025.2714V17.3846L52.2991%2017.3033C52.2608%2015.6027%2051.0245%2014.389%2049.3348%2014.389C47.6189%2014.389%2046.3886%2015.6408%2046.3886%2017.3846V25.2714C46.3886%2025.4796%2046.2198%2025.6484%2046.0116%2025.6484H42.4713C42.263%2025.6484%2042.0942%2025.4796%2042.0942%2025.2714V17.1759L42.095%2017.0838C42.1094%2016.1062%2042.3239%2014.3249%2043.5487%2012.8404C44.8207%2011.2945%2046.7835%2010.5274%2049.3395%2010.5274Z'%20fill='black'/%3e%3cpath%20d='M32.5392%2026.3362C29.9829%2026.3362%2028.0227%2025.5664%2026.7485%2024.0231C25.4845%2022.4912%2025.275%2020.6429%2025.2749%2019.6876V11.5921C25.2749%2011.3839%2025.4437%2011.2151%2025.652%2011.2151H29.2019C29.4101%2011.2151%2029.5789%2011.3839%2029.5789%2011.5921V19.4789L29.5798%2019.5603C29.618%2021.2608%2030.8543%2022.4745%2032.544%2022.4746C34.2599%2022.4746%2035.4902%2021.2228%2035.4902%2019.4789V11.5921C35.4902%2011.3839%2035.6589%2011.2151%2035.8672%2011.2151H39.4075C39.6157%2011.2151%2039.7845%2011.3839%2039.7845%2011.5921V19.6876L39.7838%2019.7797C39.7694%2020.7574%2039.555%2022.5387%2038.3302%2024.0231C37.0581%2025.569%2035.0953%2026.3362%2032.5392%2026.3362Z'%20fill='black'/%3e%3cpath%20d='M69.6881%2010.3845C69.6881%209.52569%2070.3844%208.83004%2071.2441%208.83004H72.9505C73.1584%208.83004%2073.327%208.66149%2073.327%208.45362V5.27554C73.327%205.0676%2073.1584%204.89905%2072.9505%204.89905H71.1054C68.1444%204.89905%2065.7441%207.29708%2065.7441%2010.2553V25.2727C65.7441%2025.4805%2065.9127%2025.6491%2066.1206%2025.6491H69.7523C69.9601%2025.6491%2070.1287%2025.4805%2070.1287%2025.2727V14.8153H74.1368C74.3447%2014.8153%2074.5132%2014.6468%2074.5132%2014.4388V11.6273C74.5132%2011.4194%2074.3447%2011.2509%2074.1368%2011.2509H69.6881V10.3876V10.3845Z'%20fill='black'/%3e%3cpath%20d='M63.7471%207.23706C63.7471%208.66593%2062.5889%209.82421%2061.1601%209.82421C59.7313%209.82421%2058.573%208.66593%2058.573%207.23706C58.573%205.80819%2059.7313%204.6499%2061.1601%204.6499C62.5889%204.6499%2063.7471%205.80819%2063.7471%207.23706Z'%20fill='black'/%3e%3cpath%20d='M80.9944%207.23706C80.9944%208.66593%2079.8364%209.82421%2078.4073%209.82421C76.9785%209.82421%2075.8202%208.66593%2075.8202%207.23706C75.8202%205.80819%2076.9785%204.6499%2078.4073%204.6499C79.8364%204.6499%2080.9944%205.80819%2080.9944%207.23706Z'%20fill='black'/%3e%3cdefs%3e%3cradialGradient%20id='paint0_radial_888_180'%20cx='0'%20cy='0'%20r='1'%20gradientUnits='userSpaceOnUse'%20gradientTransform='translate(9.32455%2018.6496)%20rotate(-90)%20scale(18.6496%2017.9498)'%3e%3cstop%20stop-color='white'%20stop-opacity='0.55'/%3e%3cstop%20offset='0.298077'%20stop-color='%23EFFFDC'%20stop-opacity='0.7'/%3e%3cstop%20offset='0.51'%20stop-color='%23D2FFA5'%20stop-opacity='0.87'/%3e%3cstop%20offset='0.649038'%20stop-color='%23BEFF80'%20stop-opacity='0.9'/%3e%3cstop%20offset='0.9'%20stop-color='%23A3FE2D'/%3e%3c/radialGradient%3e%3c/defs%3e%3c/svg%3e">
+            </div>
+            <!-- Timer countdown matching Japanese style: HH:MM:SS 残り -->
+            <div class="bg-black/5 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-semibold text-slate-800 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                <span id="countdown-timer" class="font-mono tracking-widest text-slate-950 font-bold">00:08:13</span>
+                <span class="text-[11px] text-slate-500 font-normal">残り</span>
+            </div>
+        </header>
+
+        <!-- Main Contents Scrollable Area -->
+        <div id="contents" class="p-4 sm:p-5 space-y-4 overflow-y-auto max-h-[85vh] custom-scrollbar">
+            
+            <!-- Lucky Ball Banner with Draw Interaction -->
+            <section class="relative overflow-hidden group">
+                <div id="draw-banner" onclick="openDrawModal()" class="cursor-pointer bg-[#d0f2fe] hover:bg-[#c2edfc] transition-all duration-300 rounded-2xl p-4 flex items-center gap-3 border border-sky-200/60 shadow-sm relative overflow-hidden active:scale-[0.98]">
+                    <!-- Ambient Glow inside Banner -->
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-sky-300 rounded-full blur-2xl opacity-40 group-hover:scale-125 transition-all duration-500"></div>
+                    
+                    <!-- SVG Lucky Ball Planet Asset -->
+                    <div class="relative w-11 h-11 flex-shrink-0">
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md animate-bounce" style="animation-duration: 3s;">
+                            <!-- Outer Ring/Orbit back -->
+                            <ellipse cx="50" cy="50" rx="42" ry="14" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" opacity="0.7"/>
+                            <!-- Planet Body Gradient -->
+                            <defs>
+                                <radialGradient id="planetGrad" cx="35%" cy="35%" r="65%">
+                                    <stop offset="0%" stop-color="#00f2fe"/>
+                                    <stop offset="100%" stop-color="#4facfe"/>
+                                </radialGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="30" fill="url(#planetGrad)" />
+                            <!-- Star in center -->
+                            <polygon points="50,37 54,45 63,45 56,51 59,59 50,54 41,59 44,51 37,45 46,45" fill="#ffffff" />
+                            <!-- Outer Ring/Orbit front -->
+                            <path d="M 12 50 A 42 14 0 0 0 88 50" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <div class="flex-1 relative z-10">
+                        <p class="text-sm font-semibold text-sky-950 flex items-center gap-1.5">
+                            ラッキーボールで最大300,000 JPYCを引き出す
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rewards & Lucky Ball Summary Cards -->
+            <section class="grid grid-cols-2 gap-4">
+                <!-- Reward Card -->
+                <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="openRewardsHistory()">
+                    <span class="text-xs font-semibold text-slate-400">報酬</span>
+                    <div class="flex items-center gap-1 mt-1">
+                        <span id="display-reward" class="text-xl font-bold text-slate-900">0 JPYC</span>
+                        <svg class="w-4 h-4 text-slate-400 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+
+                <!-- Lucky Ball Card -->
+                <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm relative">
+                    <div class="flex items-center gap-1 text-xs font-semibold text-slate-400">
+                        <span>ラッキーボール</span>
+                        <button onclick="toggleInfoModal(true)" class="focus:outline-none hover:text-slate-600">
+                            <svg class="w-4 h-4 text-slate-300 hover:text-slate-500 transition-colors" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/></svg>
+                        </button>
+                    </div>
+                    <p id="display-lucky-balls" class="text-2xl font-bold text-slate-900 mt-1">3個</p>
+                    
+                    <!-- Dynamic indicator if balls > 0 -->
+                    <span id="ball-badge" class="absolute top-3 right-3 flex h-3.5 w-3.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-purple-500"></span>
+                    </span>
+                </div>
+            </section>
+
+            <!-- Special Invite Lucky Balls Card (Replaces Attendance Card completely) -->
+            <section class="bg-white p-5 rounded-[28px] border border-slate-100 shadow-sm space-y-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">特別招待ラッキーボール</h2>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                        有効なライブウォレットを保有し、ご招待された3個のラッキーボールを使って無料でお試し抽選をプレイできます。
+                    </p>
+                </div>
+
+                <!-- Swapped 3 Steps Attendance Progress Timeline (Centering Line Perfectly) -->
+                <div class="relative py-2">
+                    <!-- Flex container solely for centering nodes and progress line vertically -->
+                    <div class="relative flex justify-between items-center h-9">
+                        <!-- Progress Bar Line (Z-index 0) -->
+                        <div class="absolute left-[16%] right-[16%] h-[2px] bg-slate-100 z-0">
+                            <div id="ball-line-progress" class="h-full bg-emerald-500 transition-all duration-500" style="width: 0%;"></div>
+                        </div>
+
+                        <!-- Step 1 Ball -->
+                        <div class="z-10 flex justify-center flex-1">
+                            <div id="ball-step-1" class="w-9 h-9 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center transition-all duration-300">
+                                <span id="ball-step-1-inner" class="w-5 h-5 bg-slate-100 rounded-full"></span>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 Ball -->
+                        <div class="z-10 flex justify-center flex-1">
+                            <div id="ball-step-2" class="w-9 h-9 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center transition-all duration-300">
+                                <span id="ball-step-2-inner" class="w-5 h-5 bg-slate-100 rounded-full"></span>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 Ball (Planet Icon) -->
+                        <div class="z-10 flex justify-center flex-1">
+                            <div id="ball-step-3" class="w-9 h-9 rounded-full bg-white flex items-center justify-center transition-all duration-300 relative">
+                                <svg id="ball-step-3-svg" viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-sm opacity-50 grayscale transition-all duration-300">
+                                    <ellipse cx="50" cy="50" rx="42" ry="14" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" opacity="0.7"/>
+                                    <circle cx="50" cy="50" r="30" fill="url(#planetGrad)" />
+                                    <polygon points="50,37 54,45 63,45 56,51 59,59 50,54 41,59 44,51 37,45 46,45" fill="#ffffff" />
+                                    <path d="M 12 50 A 42 14 0 0 0 88 50" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" stroke-linecap="round"/>
+                                </svg>
+                                <div id="ball-step-3-checked" class="hidden absolute inset-0 bg-white rounded-full border-2 border-emerald-500 items-center justify-center">
+                                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Steps labels aligned below -->
+                    <div class="flex justify-between items-center text-center mt-2">
+                        <div class="flex-1 text-center"><span class="text-[11px] font-semibold text-slate-400" id="ball-step-1-text">1個目</span></div>
+                        <div class="flex-1 text-center"><span class="text-[11px] font-semibold text-slate-400" id="ball-step-2-text">2個目</span></div>
+                        <div class="flex-1 text-center"><span class="text-[11px] font-semibold text-slate-400" id="ball-step-3-text">3個目</span></div>
+                    </div>
+                </div>
+
+                <!-- Draw Button with State Control -->
+                <div class="pt-2">
+                    <button id="draw-btn-card" onclick="triggerCardDraw()" class="w-full bg-black hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-full transition-all duration-300 active:scale-[0.99] shadow-lg shadow-black/10 flex items-center justify-center gap-2">
+                        <span>抽選する (1個目)</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Game Mission Card -->
+            <section class="bg-white p-5 rounded-[28px] border border-slate-100 shadow-sm space-y-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">ゲームミッション</h2>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                        有効なライブウォレットを保有し、3つのゲームミッションをクリアするとラッキーボールがもらえます。
+                    </p>
+                </div>
+
+
+                <!-- Game list with responsive layouts & simulations -->
+                <div class="space-y-3.5 pt-2">
+                    <!-- Game 1 -->
+                    <div onclick="simulateGameProgress('Squishy Cat Jump', 4)" class="group flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 cursor-pointer border border-transparent hover:border-slate-200/50 transition-all active:scale-[0.99]">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 bg-white flex items-center justify-center">
+                                <img src="https://vos.line-scdn.net/unifi-ops/apps/Partner%20information/Squish/squish.png" alt="Squishy Cat Jump" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900">Squishy Cat Jump</h3>
+                                <p id="task-desc-Squishy Cat Jump" class="text-xs text-slate-400 mt-0.5 font-medium">0/4ミッション進行前</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="pct-Squishy Cat Jump" class="text-xs font-bold text-slate-400 bg-white py-1 px-2.5 rounded-full border border-slate-200/60">0/4</span>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">PLAY</span>
+                        </div>
+                    </div>
+
+                    <!-- Game 2 -->
+                    <div onclick="simulateGameProgress('MERGE CAT', 3)" class="group flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 cursor-pointer border border-transparent hover:border-slate-200/50 transition-all active:scale-[0.99]">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 bg-white flex items-center justify-center">
+                                <img src="https://vos.line-scdn.net/unifi-ops/apps/Partner%20information/MERGE%20CAT/mergecat.png" alt="MERGE CAT" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900">MERGE CAT</h3>
+                                <p id="task-desc-MERGE CAT" class="text-xs text-slate-400 mt-0.5 font-medium">0/3ミッション進行前</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="pct-MERGE CAT" class="text-xs font-bold text-slate-400 bg-white py-1 px-2.5 rounded-full border border-slate-200/60">0/3</span>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">PLAY</span>
+                        </div>
+                    </div>
+
+                    <!-- Game 3 -->
+                    <div onclick="simulateGameProgress('Tap Tap Jello', 3)" class="group flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 cursor-pointer border border-transparent hover:border-slate-200/50 transition-all active:scale-[0.99]">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 bg-white flex items-center justify-center">
+                                <img src="https://vos.line-scdn.net/unifi-ops/apps/Partner%20information/Tap%20Tap%20Jello/taptapjello.png" alt="Tap Tap Jello" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900">Tap Tap Jello</h3>
+                                <p id="task-desc-Tap Tap Jello" class="text-xs text-slate-400 mt-0.5 font-medium">0/3ミッション進行前</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="pct-Tap Tap Jello" class="text-xs font-bold text-slate-400 bg-white py-1 px-2.5 rounded-full border border-slate-200/60">0/3</span>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">PLAY</span>
+                        </div>
+                    </div>
+
+                    <!-- Game 4 -->
+                    <div onclick="simulateGameProgress('Hook & Gold', 4)" class="group flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 cursor-pointer border border-transparent hover:border-slate-200/50 transition-all active:scale-[0.99]">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 bg-white flex items-center justify-center">
+                                <img src="https://vos.line-scdn.net/unifi-ops/apps/Partner%20information/Hook%26Gold/hook%26gold.png" alt="Hook & Gold" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900">Hook & Gold</h3>
+                                <p id="task-desc-Hook & Gold" class="text-xs text-slate-400 mt-0.5 font-medium">0/4ミッション進行前</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="pct-Hook & Gold" class="text-xs font-bold text-slate-400 bg-white py-1 px-2.5 rounded-full border border-slate-200/60">0/4</span>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">PLAY</span>
+                        </div>
+                    </div>
+
+                    <!-- Game 5 -->
+                    <div onclick="simulateGameProgress('Rich Match', 3)" class="group flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 cursor-pointer border border-transparent hover:border-slate-200/50 transition-all active:scale-[0.99]">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 bg-white flex items-center justify-center">
+                                <img src="https://vos.line-scdn.net/unifi-ops/apps/Partner%20information/Rich%20Match/rich%20match.png" alt="Rich Match" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900">Rich Match</h3>
+                                <p id="task-desc-Rich Match" class="text-xs text-slate-400 mt-0.5 font-medium">0/3ミッション進行前</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="pct-Rich Match" class="text-xs font-bold text-slate-400 bg-white py-1 px-2.5 rounded-full border border-slate-200/60">0/3</span>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">PLAY</span>
+                        </div>
+                    </div>
+
+                    <!-- Game 6 -->
+                    <div onclick="simulateGameProgress('SODA MERGE 2048', 3)" class="group flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 cursor-pointer border border-transparent hover:border-slate-200/50 transition-all active:scale-[0.99]">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-slate-100 bg-white flex items-center justify-center">
+                                <img src="https://vos.line-scdn.net/unifi-ops/apps/Partner%20information/SODA%20MERGE/sodamerge.png" alt="SODA MERGE 2048" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900">SODA MERGE 2048</h3>
+                                <p id="task-desc-SODA MERGE 2048" class="text-xs text-slate-400 mt-0.5 font-medium">0/3ミッション進行前</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="pct-SODA MERGE 2048" class="text-xs font-bold text-slate-400 bg-white py-1 px-2.5 rounded-full border border-slate-200/60">0/3</span>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">PLAY</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Simulated Bottom Navigation/Footer (Interactive resetting and support info) -->
+        <footer class="p-4 bg-white border-t border-slate-100 flex justify-between items-center text-xs text-slate-400">
+            <span>ミッションは毎日自動で更新されます</span>
+        </footer>
+    </main>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 max-w-sm w-full px-4"></div>
+
+    <!-- MODAL 1: Lucky Ball Info Guide -->
+    <div id="info-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] p-6 max-w-sm w-full space-y-4 shadow-2xl border border-slate-100 transform scale-95 transition-all duration-300">
+            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-2xl">🔮</div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900">ラッキーボールについて</h3>
+                <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                    ラッキーボールは貴重な特典アイテムです。ご招待された3個のボールは、有効なライブウォレットを接続して抽選プレイを行うことができます！最大300,000 JPYCが当たるチャンスです。
+                </p>
+            </div>
+            <button onclick="toggleInfoModal(false)" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-full transition-colors">
+                確認
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Interactive Lucky Ball Drawing Machine -->
+    <div id="draw-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 text-white rounded-[32px] p-6 max-w-sm w-full space-y-6 shadow-2xl border border-slate-800 transform scale-95 transition-all duration-300 relative overflow-hidden">
+            <!-- Animated Background Particle Grid -->
+            <div class="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
+            
+            <div class="flex justify-between items-center relative z-10">
+                <span class="text-xs font-bold tracking-wider text-purple-400 uppercase">ラッキーボール抽選機</span>
+                <button onclick="closeDrawModal()" class="text-slate-400 hover:text-white bg-slate-800/80 p-1.5 rounded-full transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Drawing Area Graphic -->
+            <div class="flex flex-col items-center justify-center py-6 relative z-10">
+                <!-- Outer glowing platform -->
+                <div class="relative w-44 h-44 rounded-full bg-purple-900/20 border border-purple-500/30 flex items-center justify-center shadow-[0_0_50px_rgba(147,51,234,0.15)]">
+                    
+                    <!-- Spinning Ball graphic inside -->
+                    <div id="glowing-ball" class="w-32 h-32 relative transition-all duration-500 ease-out">
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]">
+                            <ellipse cx="50" cy="50" rx="42" ry="14" transform="rotate(-25 50 50)" fill="none" stroke="#d8b4fe" stroke-width="6"/>
+                            <defs>
+                                <radialGradient id="glowingGrad" cx="35%" cy="35%" r="65%">
+                                    <stop offset="0%" stop-color="#f0abfc"/>
+                                    <stop offset="50%" stop-color="#c084fc"/>
+                                    <stop offset="100%" stop-color="#818cf8"/>
+                                </radialGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="28" fill="url(#glowingGrad)" />
+                            <!-- Sparkles -->
+                            <polygon points="50,37 53,44 60,44 55,49 57,56 50,52 43,56 45,49 40,44 47,44" fill="#ffffff" />
+                            <path d="M 12 50 A 42 14 0 0 0 88 50" transform="rotate(-25 50 50)" fill="none" stroke="#d8b4fe" stroke-width="6" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="text-center mt-6">
+                    <p class="text-sm text-slate-400">現在保持しているボール</p>
+                    <p id="modal-balls-count" class="text-3xl font-extrabold text-white mt-1">0個</p>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="space-y-3 relative z-10">
+                <button id="draw-action-btn" onclick="executeDraw()" class="w-full py-4 px-6 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-extrabold shadow-lg shadow-purple-900/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                    <span>1回抽選する</span>
+                </button>
+                <p class="text-[10px] text-center text-slate-500">全てのラッキーボールから最低0.1〜最大300,000 JPYCの獲得が保証されています。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Reward History / Claimed List -->
+    <div id="history-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] p-6 max-w-sm w-full space-y-4 shadow-2xl border border-slate-100 transform scale-95 transition-all duration-300">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-900">あなたの獲得報酬</h3>
+                <button onclick="closeRewardsHistory()" class="text-slate-400 hover:text-slate-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <div id="reward-history-list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                <!-- Loaded dynamically -->
+            </div>
+
+            <button onclick="closeRewardsHistory()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-full transition-colors">
+                ダッシュボードに戻る
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 4: Wallet Connection Required Modal (Exactly matches style from image_3eca59.png) -->
+    <div id="wallet-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] p-6 max-w-sm w-full shadow-2xl border border-slate-100/50 transform scale-95 transition-all duration-300 relative flex flex-col justify-between min-h-[320px]">
+            
+            <!-- Header layout with absolute title & close button match to image_3eca59.png -->
+            <div class="flex justify-between items-center pt-2">
+                <h3 class="text-[22px] font-bold text-[#1e293b] leading-tight">ウォレット接続</h3>
+                <button onclick="closeWalletModal()" class="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                    <!-- Close Icon matching image_3eca59.png -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Centered information layout match -->
+            <div class="my-6 text-center px-4">
+                <p class="text-slate-400 text-sm leading-relaxed font-medium">
+                    ご招待ラッキーボールをプレイしたり、ゲームミッションを開始するには、有効なライブウォレットを接続する必要があります。
+                </p>
+            </div>
+
+            <!-- Footer Action pill-shape button matching image_3eca59.png -->
+            <div>
+                <button class="w-full bg-[#0f172a] hover:bg-slate-800 text-white font-bold py-4 px-6 rounded-full transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-2 interact-button">
+                    <span>ウォレットを接続する</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- REACTIVE STATE MANAGEMENT ---
+        let state = {
+            walletConnected: false, // Actions require wallet connection to trigger
+            currentBallStep: 1,     // Starts at 1 (representing step 1: 1st Ball), advances to 4 (all completed)
+            luckyBalls: 3,          // Starts with exactly 3 trial balls
+            totalReward: 0.00,
+            rewardsList: [],
+            // Game progress tracking: current value, max required
+            games: {
+                "Squishy Cat Jump": { current: 0, max: 4, completed: false },
+                "MERGE CAT": { current: 0, max: 3, completed: false },
+                "Tap Tap Jello": { current: 0, max: 3, completed: false },
+                "Hook & Gold": { current: 0, max: 4, completed: false },
+                "Rich Match": { current: 0, max: 3, completed: false },
+                "SODA MERGE 2048": { current: 0, max: 3, completed: false }
+            },
+            completedGameMissionsCount: 0 // How many missions completed (max 3)
+        };
+
+        // --- COUNTDOWN TIMER ---
+        let totalSeconds = (8 * 60) + 13; // Starting from 00:08:13
+        function startTimer() {
+            const timerEl = document.getElementById('countdown-timer');
+            const interval = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    totalSeconds = 8 * 3600; // loop / reset timer
+                }
+                totalSeconds--;
+                
+                const hrs = Math.floor(totalSeconds / 3600);
+                const mins = Math.floor((totalSeconds % 3600) / 60);
+                const secs = totalSeconds % 60;
+
+                const displayHrs = hrs.toString().padStart(2, '0');
+                const displayMins = mins.toString().padStart(2, '0');
+                const displaySecs = secs.toString().padStart(2, '0');
+
+                timerEl.textContent = `${displayHrs}:${displayMins}:${displaySecs}`;
+            }, 1000);
+        }
+
+        // --- SHOW TOAST ALERTS ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            // Style setup based on type
+            const bgClass = type === 'success' ? 'bg-emerald-950 text-white' : 'bg-slate-950 text-white';
+            const icon = type === 'success' ? '🎉' : '🔔';
+
+            toast.className = `flex items-center gap-3 p-4 rounded-2xl shadow-xl border border-white/10 ${bgClass} transform translate-y-2 opacity-0 transition-all duration-300`;
+            toast.innerHTML = `
+                <span class="text-lg">${icon}</span>
+                <span class="text-xs font-semibold flex-1">${message}</span>
+            `;
+
+            container.appendChild(toast);
+            
+            // Animate In
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            // Auto Remove after 4 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-y-[-10px]', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // --- WALLET GATEWAY CONTROL ---
+        function openWalletModal() {
+            const modal = document.getElementById('wallet-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.firstElementChild.classList.remove('scale-95');
+                modal.firstElementChild.classList.add('scale-100');
+            }, 50);
+        }
+
+        function closeWalletModal() {
+            const modal = document.getElementById('wallet-modal');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 150);
+        }
+
+        function connectWalletMock() {
+            state.walletConnected = true;
+            closeWalletModal();
+            showToast("ウォレットが正常に接続されました！ 🚀", "success");
+            syncUI();
+        }
+
+        // --- INITIAL UI SETUP & SYNC ---
+        function syncUI() {
+            // Update Top Header numbers
+            document.getElementById('display-reward').textContent = `${state.totalReward.toFixed(2)} JPYC`;
+            document.getElementById('display-lucky-balls').textContent = `${state.luckyBalls}個`;
+            document.getElementById('modal-balls-count').textContent = `${state.luckyBalls}個`;
+
+            // Lucky ball glowing badge toggle
+            const badge = document.getElementById('ball-badge');
+            if (state.luckyBalls > 0) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            // Sync Swapped 3-Step Ball Timeline
+            updateBallTimeline();
+
+            // Sync Game Missions Timeline
+            updateGameTimeline();
+        }
+
+        // --- SPECIAL INVITE TIMELINE LOGIC (3-Step Swapped Ball UI) ---
+        function updateBallTimeline() {
+            const lineProgress = document.getElementById('ball-line-progress');
+            
+            // Calculate step state based on current Ball Step
+            const percentage = Math.min(((state.currentBallStep - 1) / 2) * 100, 100);
+            lineProgress.style.width = `${state.currentBallStep > 0 ? percentage : 0}%`;
+
+            for (let s = 1; s <= 3; s++) {
+                const node = document.getElementById(`ball-step-${s}`);
+                const text = document.getElementById(`ball-step-${s}-text`);
+
+                if (state.currentBallStep > s) {
+                    // Cleared / Completed step
+                    if (s === 3) {
+                        node.className = "w-9 h-9 rounded-full bg-white flex items-center justify-center relative";
+                        node.innerHTML = `
+                            <svg id="ball-step-3-svg" viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-sm">
+                                <ellipse cx="50" cy="50" rx="42" ry="14" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" opacity="0.7"/>
+                                <circle cx="50" cy="50" r="30" fill="url(#planetGrad)" />
+                                <polygon points="50,37 54,45 63,45 56,51 59,59 50,54 41,59 44,51 37,45 46,45" fill="#ffffff" />
+                                <path d="M 12 50 A 42 14 0 0 0 88 50" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" stroke-linecap="round"/>
+                            </svg>
+                            <div id="ball-step-3-checked" class="absolute inset-0 bg-white rounded-full border-2 border-emerald-500 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>`;
+                    } else {
+                        node.className = "w-9 h-9 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center transition-all duration-300";
+                        node.innerHTML = `
+                            <span class="w-6 h-6 rounded-full progress-ring-checked" style="--percent: 100%;">
+                                <span class="w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                            </span>`;
+                    }
+                    if (text) text.className = "text-[11px] font-semibold text-emerald-600";
+                } else {
+                    // Locked Step
+                    if (s === 3) {
+                        node.className = "w-9 h-9 rounded-full bg-white flex items-center justify-center relative";
+                        node.innerHTML = `
+                            <svg id="ball-step-3-svg" viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-sm opacity-50 grayscale">
+                                <ellipse cx="50" cy="50" rx="42" ry="14" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" opacity="0.7"/>
+                                <circle cx="50" cy="50" r="30" fill="url(#planetGrad)" />
+                                <polygon points="50,37 54,45 63,45 56,51 59,59 50,54 41,59 44,51 37,45 46,45" fill="#ffffff" />
+                                <path d="M 12 50 A 42 14 0 0 0 88 50" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" stroke-linecap="round"/>
+                            </svg>
+                            <div id="ball-step-3-checked" class="hidden absolute inset-0 bg-white rounded-full border-2 border-emerald-500 items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>`;
+                    } else {
+                        node.className = "w-9 h-9 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center transition-all duration-300";
+                        node.innerHTML = `<span class="w-5 h-5 bg-slate-100 rounded-full"></span>`;
+                    }
+                    if (text) text.className = "text-[11px] font-semibold text-slate-400";
+                }
+            }
+
+            // Sync main card button state
+            const drawBtn = document.getElementById('draw-btn-card');
+            if (state.currentBallStep > 3) {
+                drawBtn.disabled = true;
+                drawBtn.className = "w-full bg-slate-200 text-slate-400 font-bold py-4 px-6 rounded-full cursor-not-allowed flex items-center justify-center gap-2";
+                drawBtn.innerHTML = `<span>特別招待プレイ完了</span>`;
+            } else {
+                drawBtn.disabled = false;
+                drawBtn.className = "w-full bg-black hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-full transition-all duration-300 active:scale-[0.99] shadow-lg shadow-black/10 flex items-center justify-center gap-2";
+                
+                const stepLabels = ["1個目", "2個目", "3個目"];
+                drawBtn.innerHTML = `<span>抽選する (${stepLabels[state.currentBallStep - 1]})</span>`;
+            }
+        }
+
+        function triggerCardDraw() {
+            // Guard action if wallet disconnected
+            if (!state.walletConnected) {
+                openWalletModal();
+                return;
+            }
+
+            if (state.currentBallStep > 3) return;
+
+            // Direct trigger to spin modal drawer automatically for unified satisfaction!
+            openDrawModal();
+        }
+
+        // --- GAME MISSIONS SIMULATION ---
+        function simulateGameProgress(gameName, maxVal) {
+            // Guard action if wallet disconnected
+            if (!state.walletConnected) {
+                openWalletModal();
+                return;
+            }
+
+            let gameObj = state.games[gameName];
+            if (gameObj.completed) {
+                showToast(`"${gameName}" のミッションはすでに全てクリアしています！`, 'info');
+                return;
+            }
+
+            gameObj.current += 1;
+            
+            // Track dynamic description text
+            const descEl = document.getElementById(`task-desc-${gameName}`);
+            const pctEl = document.getElementById(`pct-${gameName}`);
+
+            if (gameObj.current >= gameObj.max) {
+                gameObj.current = gameObj.max;
+                gameObj.completed = true;
+                descEl.textContent = `ミッション完了！ 🎉`;
+                descEl.className = "text-xs text-emerald-500 font-bold mt-0.5";
+                pctEl.textContent = `完了`;
+                pctEl.className = "text-xs font-bold text-white bg-emerald-500 py-1 px-2.5 rounded-full";
+                
+                // Advance global game completions count
+                state.completedGameMissionsCount += 1;
+                showToast(`${gameName} のミッションをクリアしました！`, 'success');
+
+                if (state.completedGameMissionsCount === 3) {
+                    state.luckyBalls += 1;
+                    showToast("ゲームミッションを3つクリアしました！ラッキーボールを1個獲得！ 🔮", 'success');
+                }
+            } else {
+                descEl.textContent = `${gameObj.current}/${gameObj.max}ミッション進行前`;
+                pctEl.textContent = `${gameObj.current}/${gameObj.max}`;
+            }
+
+            syncUI();
+        }
+
+        function updateGameTimeline() {
+            const lineProgress = document.getElementById('games-line-progress');
+            // 3 major game steps
+            const percentage = Math.min((state.completedGameMissionsCount / 2) * 100, 100);
+            lineProgress.style.width = `${state.completedGameMissionsCount > 0 ? percentage : 0}%`;
+
+            for (let s = 1; s <= 3; s++) {
+                const node = document.getElementById(`game-step-${s}`);
+                const text = document.getElementById(`game-step-${s}-text`);
+
+                if (state.completedGameMissionsCount >= s) {
+                    // Cleared step
+                    if (s === 3) {
+                        node.className = "w-9 h-9 rounded-full bg-white flex items-center justify-center relative";
+                        node.innerHTML = `
+                            <svg id="game-step-3-svg" viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-sm">
+                                <ellipse cx="50" cy="50" rx="42" ry="14" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" opacity="0.7"/>
+                                <circle cx="50" cy="50" r="30" fill="url(#planetGrad)" />
+                                <polygon points="50,37 54,45 63,45 56,51 59,59 50,54 41,59 44,51 37,45 46,45" fill="#ffffff" />
+                                <path d="M 12 50 A 42 14 0 0 0 88 50" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" stroke-linecap="round"/>
+                            </svg>
+                            <div id="game-step-3-checked" class="absolute inset-0 bg-white rounded-full border-2 border-emerald-500 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>`;
+                    } else {
+                        node.className = "w-9 h-9 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center transition-all duration-300";
+                        node.innerHTML = `
+                            <span class="w-6 h-6 rounded-full progress-ring-checked" style="--percent: 100%;">
+                                <span class="w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                            </span>`;
+                    }
+                    if (text) text.className = "text-[11px] font-semibold text-emerald-600";
+                } else {
+                    // Locked Step
+                    if (s === 3) {
+                        node.className = "w-9 h-9 rounded-full bg-white flex items-center justify-center relative";
+                        node.innerHTML = `
+                            <svg id="game-step-3-svg" viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-sm opacity-50 grayscale">
+                                <ellipse cx="50" cy="50" rx="42" ry="14" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" opacity="0.7"/>
+                                <circle cx="50" cy="50" r="30" fill="url(#planetGrad)" />
+                                <polygon points="50,37 54,45 63,45 56,51 59,59 50,54 41,59 44,51 37,45 46,45" fill="#ffffff" />
+                                <path d="M 12 50 A 42 14 0 0 0 88 50" transform="rotate(-25 50 50)" fill="none" stroke="#a855f7" stroke-width="7" stroke-linecap="round"/>
+                            </svg>
+                            <div id="game-step-3-checked" class="hidden absolute inset-0 bg-white rounded-full border-2 border-emerald-500 items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>`;
+                    } else {
+                        node.className = "w-9 h-9 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center transition-all duration-300";
+                        node.innerHTML = `<span class="w-5 h-5 bg-slate-100 rounded-full"></span>`;
+                    }
+                    if (text) text.className = "text-[11px] font-semibold text-slate-400";
+                }
+            }
+        }
+
+        // --- DRAW BALL MODAL INTERACTIONS ---
+        function openDrawModal() {
+            // Guard action if wallet disconnected
+            if (!state.walletConnected) {
+                openWalletModal();
+                return;
+            }
+            document.getElementById('draw-modal').classList.remove('hidden');
+            document.getElementById('draw-modal').firstElementChild.classList.remove('scale-95');
+            document.getElementById('draw-modal').firstElementChild.classList.add('scale-100');
+        }
+
+        // --- CLOSE DRAW BALL ---
+        function closeDrawModal() {
+            document.getElementById('draw-modal').firstElementChild.classList.remove('scale-100');
+            document.getElementById('draw-modal').firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                document.getElementById('draw-modal').classList.add('hidden');
+            }, 150);
+        }
+
+        // --- EXECUTE RANDOM PRIZE DRAW ---
+        function executeDraw() {
+            if (!state.walletConnected) {
+                openWalletModal();
+                return;
+            }
+            if (state.luckyBalls <= 0) {
+                showToast("ラッキーボールを持っていません。ゲームミッションなどから獲得してください。", 'error');
+                return;
+            }
+
+            const drawBtn = document.getElementById('draw-action-btn');
+            const glowBall = document.getElementById('glowing-ball');
+
+            drawBtn.disabled = true;
+            // Spin animation
+            glowBall.classList.add('animate-spin');
+            drawBtn.innerHTML = `<span>抽選中...</span>`;
+
+            setTimeout(() => {
+                // Determine random USDT reward
+                const roll = Math.random();
+                let rewardAmt = 0;
+                
+                if (roll < 0.50) {
+                    rewardAmt = parseFloat((Math.random() * 2 + 0.5).toFixed(2)); // $0.50 to $2.50
+                } else if (roll < 0.85) {
+                    rewardAmt = parseFloat((Math.random() * 10 + 5).toFixed(2)); // $5.00 to $15.00
+                } else if (roll < 0.98) {
+                    rewardAmt = parseFloat((Math.random() * 50 + 20).toFixed(2)); // $20.00 to $70.00
+                } else {
+                    rewardAmt = 300000.00; // Jackpot!
+                }
+
+                // Apply reward state
+                state.luckyBalls -= 1;
+                state.totalReward += rewardAmt;
+                
+                // Dynamically sync and advance the 3 Special Invite Ball Step
+                state.currentBallStep = Math.min(4, 4 - state.luckyBalls);
+                
+                const timestamp = new Date().toLocaleTimeString();
+                state.rewardsList.unshift({
+                    amount: rewardAmt,
+                    time: timestamp
+                });
+
+                // Clear animation
+                glowBall.classList.remove('animate-spin');
+                drawBtn.disabled = false;
+                drawBtn.innerHTML = `<span>1回抽選する</span>`;
+
+                syncUI();
+
+                // Special congrats
+                if (rewardAmt === 500.00) {
+                    showToast("🏆 ジャックポット！300,000 JPYCを獲得しました！", 'success');
+                } else {
+                    showToast(`おめでとうございます！ ${rewardAmt.toFixed(2)} JPYCを獲得しました！`, 'success');
+                }
+            }, 1800);
+        }
+
+        // --- INFO MODAL TOGGLE ---
+        function toggleInfoModal(show) {
+            const modal = document.getElementById('info-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // --- REWARDS HISTORY MODAL ---
+        function openRewardsHistory() {
+            const listEl = document.getElementById('reward-history-list');
+            listEl.innerHTML = '';
+
+            if (state.rewardsList.length === 0) {
+                listEl.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">まだ報酬を獲得していません。まずはラッキーボールを抽選しましょう！</div>`;
+            } else {
+                state.rewardsList.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = "flex justify-between items-center p-3 rounded-xl bg-slate-50 border border-slate-100";
+                    row.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="text-base">💎</span>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800">ラッキーボール報酬</p>
+                                <p class="text-[10px] text-slate-400">${item.time}</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-extrabold text-emerald-600">+${item.amount.toFixed(2)} JPYC</span>
+                    `;
+                    listEl.appendChild(row);
+                });
+            }
+
+            document.getElementById('history-modal').classList.remove('hidden');
+        }
+
+        // --- CLOSE REWARDS HISTORY ---
+        function closeRewardsHistory() {
+            document.getElementById('history-modal').classList.add('hidden');
+        }
+
+        // --- RESET DEMO ---
+        function resetAllProgress() {
+            state = {
+                walletConnected: false,
+                currentBallStep: 1,
+                luckyBalls: 3,
+                totalReward: 0.00,
+                rewardsList: [],
+                games: {
+                    "Squishy Cat Jump": { current: 0, max: 4, completed: false },
+                    "MERGE CAT": { current: 0, max: 3, completed: false },
+                    "Tap Tap Jello": { current: 0, max: 3, completed: false },
+                    "Hook & Gold": { current: 0, max: 4, completed: false },
+                    "Rich Match": { current: 0, max: 3, completed: false },
+                    "SODA MERGE 2048": { current: 0, max: 3, completed: false }
+                },
+                completedGameMissionsCount: 0
+            };
+
+            // Reset Game UI Cards
+            Object.keys(state.games).forEach(gameName => {
+                const gameObj = state.games[gameName];
+                document.getElementById(`task-desc-${gameName}`).textContent = `0/${gameObj.max}ミッション進行前`;
+                document.getElementById(`task-desc-${gameName}`).className = "text-xs text-slate-400 mt-0.5 font-medium";
+                document.getElementById(`pct-${gameName}`).textContent = `0/${gameObj.max}`;
+                document.getElementById(`pct-${gameName}`).className = "text-xs font-bold text-slate-400 bg-white py-1 px-2.5 rounded-full border border-slate-200/60";
+            });
+
+            syncUI();
+            showToast("デモの進行状況をリセットしました！", "info");
+        }
+
+        // --- RUN ENGINE ON BOOT ---
+        window.onload = function() {
+            startTimer();
+            syncUI();
+        }
+    </script>
+</body>
+</html>
